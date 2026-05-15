@@ -1,6 +1,7 @@
 import network
 import time
 import secrets
+import urequests
 
 def connectToServer(ssid,password):
     wlan = network.WLAN(network.STA_IF)
@@ -13,14 +14,20 @@ def connectToServer(ssid,password):
         
     print(f"Connected to {ssid}!")
     print(wlan.ifconfig())
+    time.sleep(3)
     try:
-        webServer()
+        webServer(url)
     except Exception as e:
         print(f"Error occured while trying to request webserver: {e}")
     
-def webServer():
-    print("Requesting to web service")
+def webServer(url):
+    print(f"Requesting to web service on {url}...")
+    time.sleep(3)
+    response = urequests.get(url)
+    print(response.text)
+    response.close()
     
+   
 def login(max_attempts=3):
 
     for attempt in range(max_attempts):
@@ -44,4 +51,5 @@ def main():
     login()
 
 if __name__ == "__main__":
+    url = "http://192.168.1.2:8000/"
     main()
